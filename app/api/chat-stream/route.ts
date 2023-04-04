@@ -38,6 +38,7 @@ async function createStream(req: NextRequest) {
               label: 'user1',
               value: 100
             });
+            console.log("event sent");
             
             controller.close();
             return;
