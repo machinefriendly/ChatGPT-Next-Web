@@ -2,6 +2,12 @@ import { createParser } from "eventsource-parser";
 import { NextRequest } from "next/server";
 import { requestOpenai } from "../common";
 
+import ReactGA from 'react-ga4';
+
+// Initialize the tracker with your tracking ID
+ReactGA.initialize('G-ZJXEB6F8KW');
+
+
 async function createStream(req: NextRequest) {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
@@ -24,6 +30,15 @@ async function createStream(req: NextRequest) {
           const data = event.data;
           // https://beta.openai.com/docs/api-reference/completions/create#completions/create-stream
           if (data === "[DONE]") {
+            
+            // Send an event to Google Analytics
+            ReactGA.event({
+              category: 'chat',
+              action: 'done',
+              label: 'user1',
+              value: 100
+            });
+            
             controller.close();
             return;
           }
