@@ -3,6 +3,11 @@ import { Message, ModelConfig, useAccessStore } from "./store";
 import Locale from "./locales";
 import { showToast } from "./components/ui-lib";
 
+import ReactGA from 'react-ga4';
+
+// Initialize the tracker with your tracking ID
+ReactGA.initialize('G-ZJXEB6F8KW');
+
 const TIME_OUT_MS = 30000;
 
 const makeRequestParam = (
@@ -166,6 +171,16 @@ export async function requestChatStream(
         options?.onMessage(responseText, false);
 
         if (done) {
+           // Send an event to Google Analytics
+            ReactGA.event({
+              category: 'chat',
+              action: 'done',
+              label: 'user1',
+              value: 100
+            });
+            console.log("event sent from requests.ts!");
+            
+            controller.close();
           break;
         }
       }
